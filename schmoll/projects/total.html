@@ -1,0 +1,261 @@
+
+<html>
+<head>
+<script src="http://static2.chartbeat.com/js/jquery/jquery-1.6.2.min.js" type="text/javascript" language="javascript"></script>
+<script type="text/javascript">
+        counts = {};
+
+        
+        // Read a page's GET URL variables and return them as an associative array.
+    function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
+
+
+        var k = getUrlVars()['k'];
+        var domain = getUrlVars()['host'];
+
+        function commafy(text){ 
+            return text.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+        };
+        
+
+        //animate for percentages
+        
+        function animateP(element_name, value) {
+            var elem = $(element_name);
+            var current = counts[element_name] || 0;
+            $({count: current}).animate({count: value}, {
+                                        duration: 500,
+                                        step: function() {
+                                            elem.text(commafy(String(parseFloat(this.count).toFixed(1))));
+                                        }})
+            counts[element_name] = value;
+        };
+        
+		//animate for large numbers
+
+        function animate(element_name, value) {
+            var elem = $(element_name);
+            var current = counts[element_name] || 0;
+            $({count: current}).animate({count: value}, {
+                                        duration: 500,
+                                        step: function() {
+                                            elem.text(commafy(String(parseInt(this.count))));
+                                        }})
+            counts[element_name] = value;
+        };
+
+        function update() {
+        
+         if (getUrlVars()['host']) {
+         
+            var jqxhr = $.getJSON("http://api.chartbeat.com/live/summary/v3/?apikey="+k+"&host="+domain+"&keys=O,P,B,g", function(data) {
+
+                 
+                                for (var key in data['g']['data']) {
+                                    break;
+                                }
+                                
+                                var total = data['g']['data'][key];
+                                
+                                //get percent
+                                
+                                var ie = String(parseFloat(data['B']['data']['ie']) / parseFloat(total) * 100);
+                                var safari = String(parseFloat(data['B']['data']['safari']) / parseFloat(total) * 100);
+                                var firefox = String(parseFloat(data['B']['data']['firefox']) / parseFloat(total) * 100);
+                                var chrome = String(parseFloat(data['B']['data']['chrome']) / parseFloat(total) * 100);
+                                var desktop = String(parseFloat(data['P']['data']['desktop']) / parseFloat(total) * 100);
+                                var mobile = String(parseFloat(data['P']['data']['mobile']) / parseFloat(total) * 100);
+                                var windows = String(parseFloat(data['O']['data']['windows']) / parseFloat(data['P']['data']['desktop']) * 100);
+                                var android = String(parseFloat(data['O']['data']['android']) / parseFloat(data['P']['data']['mobile']) * 100);
+                                var mac = String(parseFloat(data['O']['data']['mac']) / parseFloat(data['P']['data']['desktop']) * 100);
+                                var ios = String(parseFloat(data['O']['data']['ios']) / parseFloat(data['P']['data']['mobile']) * 100);
+
+                                animate("#total-count", total);
+                                animateP("#ie-count", ie);
+                                animateP("#safari-count", safari);
+                                animateP("#firefox-count", firefox);
+                                animateP("#chrome-count", chrome);
+                                animateP("#desktop-count", desktop);
+                                animateP("#mobile-count", mobile);
+                                animateP("#win-count", windows);
+                                animateP("#android-count", android)    ;
+                                animateP("#mac-count", mac);
+                                animateP("#ios-count", ios);
+                        });
+
+                }
+                else {
+                    var jqxhr = $.getJSON("http://chartbeat.com/api/cbtotal?true&v=2&jsonp=?", function(data) {
+                                animate("#total-count", data['n']);
+                                animate("#ie-count", data['bt']['ie']);
+                                animate("#safari-count", data['bt']['safari']);
+                                animate("#firefox-count", data['bt']['ff']);
+                                animate("#chrome-count", data['bt']['chrome']);
+                                animate("#desktop-count", data['pl']['d']);
+                                animate("#mobile-count", data['pl']['m']);
+                                animate("#win-count", data['os']['win']);
+                                animate("#android-count", data['os']['android']);
+                                animate("#mac-count", data['os']['mac']);
+                                animate("#ios-count", data['os']['ios']);
+                        });
+                }
+        };
+
+        setInterval(update, 3000);
+        update();
+</script>
+<style>
+    body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        font-weight: bold;
+        background-color: #232323;
+        color: #D7AF72;
+        font-family: sans-serif;
+    }
+
+    #total-count {
+        font-size: 1600%;
+        
+    }
+
+    #desktop-count, #mobile-count {
+        font-size: 1000%;
+    }
+
+    #ie-count, #safari-count, #firefox-count, #chrome-count {
+        font-size: 550%;
+    }
+
+    #win-count, #mac-count, #ios-count, #android-count {
+        font-size: 550%;
+    }
+
+    .browser {
+        padding-top: 150px;
+        width: 25%;
+        float: left;
+    }
+
+    .platform {
+        width: 50%;
+        float: left;
+    }
+
+    .os {
+        width: 25%;
+        float: left;
+    }
+
+    .total {
+        width: 100%;
+        /*height: 33%;*/
+    }
+
+    .label {
+        color: #A1804C;
+        font-size: 24px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-shadow: 0 2px 0 black;
+    }
+	
+    .count {
+        text-shadow: 0 5px 0 black;
+    }
+
+    #container {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    #position {
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+<!--[if IE]>
+<style type="text/css">
+    #container { position: relative; }
+    #position { position: absolute; top: 50%; }
+    #content { position: relative; top: -50%; }
+</style>
+<![endif]-->
+</head>
+<body>
+<div id="container">
+    <div id="position">
+        <div id="content">
+            <div class="total">
+                <div class="label">Total People</div>
+                <div id="total-count" class="count"></div>
+            </div>
+            <div id="platforms">
+                <div class="platform">
+                    <div class="label">Desktop</div>
+                    <div id="desktop-count" class="count"></div>
+                </div>
+                <div class="platform">
+                    <div class="label">Mobile</div>
+                    <div id="mobile-count" class="count"></div>
+                </div>
+            </div>
+            <div id="oses">
+                <div class="os">
+                     <div class="label">Windows</div>
+                     <div id="win-count" class="count"></div>
+                </div>
+                <div class="os">
+                     <div class="label">Mac</div>
+                     <div id="mac-count" class="count"></div>
+                </div>
+                <div class="os">
+                     <div class="label">iOS</div>
+                     <div id="ios-count" class="count"></div>
+                </div>
+                <div class="os">
+                     <div class="label">Android</div>
+                     <div id="android-count" class="count"></div>
+                </div>
+            </div>
+            <div id="browsers">
+                <div class="browser">
+                    <div class="label">Internet Explorer</div>
+                    <div id="ie-count" class="count"></div>
+                </div>
+                <div class="browser">
+                    <div class="label">Safari</div>
+                    <div id="safari-count" class="count"></div>
+                </div>
+                <div class="browser">
+                    <div class="label">Firefox</div>
+                    <div id="firefox-count" class="count"></div>
+                </div>
+                <div class="browser">
+                    <div class="label">Chrome</div>
+                    <div id="chrome-count" class="count"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
