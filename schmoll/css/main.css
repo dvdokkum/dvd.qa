@@ -107,6 +107,10 @@ ul.posts span {
   margin-right: 3em;
 }
 
+.site .footer .contact img {
+  width: 40px;
+}
+
 .site .footer .contact a {
   color: #8085C1;
 }
