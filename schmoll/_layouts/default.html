@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>{{ page.title }}</title>
@@ -18,7 +19,7 @@
         <div class="site">
           <div class="header">
             <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-            <a class="extra" href="/">home</a>
+            <a class="extra" href="/sound">sound</a>
           </div>
 
           {{ content }}
@@ -28,11 +29,26 @@
               <p>
                 <a href="https://github.com/dvdokkum"><img src="/media/icons/github.png"></a>
                 <a href="https://twitter.com/dvdokkum"><img src="/media/icons/tweet.png"></a>
-                <a href="https://vimeo/dvdvd"><img src="/media/icons/vimeo.png"></a>
+                <a href="https://vimeo.com/dvdvd"><img src="/media/icons/vimeo.png"></a>
               </p>
             </div>
           </div>
         </div>
-
+      <script type="text/javascript">
+        var _sf_async_config = { uid: 42943, domain: 'dvd.qa', useCanonical: true };
+        (function() {
+          function loadChartbeat() {
+            window._sf_endpt = (new Date()).getTime();
+            var e = document.createElement('script');
+            e.setAttribute('language', 'javascript');
+            e.setAttribute('type', 'text/javascript');
+            e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
+            document.body.appendChild(e);
+          };
+        var oldonload = window.onload;
+        window.onload = (typeof window.onload != 'function') ?
+          loadChartbeat : function() { oldonload(); loadChartbeat(); };
+        })();
+      </script>
     </body>
 </html>
