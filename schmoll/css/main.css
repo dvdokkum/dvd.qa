@@ -168,3 +168,33 @@ ul.posts span {
 .post pre.terminal code {
   background-color: #333;
 }
+
+/*****************************************************************************/
+/*
+/* Party
+/*
+/*****************************************************************************/
+
+/* standard */
+
+.party {
+  text-align: center;
+}
+
+.party h1{
+  font-size: 40px;
+}
+
+.party h2{
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+.party h3{
+  font-size: 15px;
+  margin: 15px;
+  width: 600px;
+  text-align: justify;
+  font-weight: normal;
+}
+
