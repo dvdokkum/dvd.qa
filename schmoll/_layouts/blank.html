@@ -57,7 +57,7 @@ googletag.enableServices();
             var e = document.createElement('script');
             e.setAttribute('language', 'javascript');
             e.setAttribute('type', 'text/javascript');
-            e.setAttribute('src','//static.chartbeat.com/js/chartbeat.js');
+            e.setAttribute('src','//static.chartbeat.com/js/chartbeat_pub.js');
             document.body.appendChild(e);
           };
         var oldonload = window.onload;
@@ -65,5 +65,16 @@ googletag.enableServices();
           loadChartbeat : function() { oldonload(); loadChartbeat(); };
         })();
       </script>
+
+      <script type='text/javascript'>
+_sf_async_config.engagedAdCallback = function(ad, engagedSeconds) {
+  console.log('test ad callback at ' + engagedSeconds);
+  pSUPERFLY.refreshAd(ad.id);
+}
+_sf_async_config.engagedAdFilters = [
+  { // All ads should callback at 7s.
+    engagedSeconds: 7
+  }];
+  </script>
     </body>
 </html>
